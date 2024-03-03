@@ -1,1 +1,0 @@
-../../core/components/com_look_at.ts
