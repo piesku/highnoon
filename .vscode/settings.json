@@ -12,4 +12,7 @@
     "typescript.tsc.autoDetect": "off",
     "typescript.tsdk": "node_modules/typescript/lib",
     "typescript.preferences.importModuleSpecifierEnding": "js",
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
 }
