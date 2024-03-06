@@ -3043,10 +3043,10 @@
   }
 
   // ../lib/projection.ts
-  function perspective(fov_y, near, far) {
+  function orthographic(radius, near, far) {
     return {
-      Kind: 0 /* Perspective */,
-      FovY: fov_y,
+      Kind: 1 /* Orthographic */,
+      Radius: radius,
       Near: near,
       Far: far,
       Projection: mat4_create(),
@@ -3454,8 +3454,12 @@
       transform(),
       mimic(first_named(game2.World, "camera anchor")),
       children([
-        transform([0, 1, -6], [0, 1, 0, 0]),
-        camera_canvas(perspective(1, 0.1, 1e3), [0.1, 0.5, 0.8, 1])
+        transform(
+          [50, 50, 50],
+          // Isometric projection: Y 45°, X -35.264°, Z 0°
+          [-0.28, 0.364, 0.116, 0.88]
+        ),
+        camera_canvas(orthographic([7, 7], 1, 200), [0.1, 0.5, 0.8, 1])
       ])
     ];
   }
@@ -3793,12 +3797,7 @@
           })
         ],
         // Camera rig anchor.
-        [
-          transform(),
-          named("camera anchor"),
-          move(0, 3),
-          control_player(false, 0, 0.2, -10, 80)
-        ],
+        [transform(void 0, void 0, void 0, true), named("camera anchor")],
         // Overhead light.
         [transform([0, 2, 0]), light_point([1, 1, 1], 5)]
       )
@@ -3833,12 +3832,8 @@
       }
     }
     instantiate(game2, [transform(), set_rotation(-30, 30, 0), light_directional([1, 1, 1], 0.1)]);
-    instantiate(game2, [...blueprint_player(game2), set_position(0, 1, 0), set_rotation(0, 180, 0)]);
-    instantiate(game2, [
-      ...blueprint_camera_follow(game2),
-      set_position(0, 1e3, 1e3),
-      set_rotation(0, 180, 0)
-    ]);
+    instantiate(game2, [...blueprint_player(game2), set_position(0, 1, 0)]);
+    instantiate(game2, [...blueprint_camera_follow(game2), set_position(-100, 0, -100)]);
     instantiate(game2, [
       transform([0, 15, 0]),
       control_always(null, [0, 1, 0, 0]),
