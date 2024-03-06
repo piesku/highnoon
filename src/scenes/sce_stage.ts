@@ -36,14 +36,10 @@ export function scene_stage(game: Game) {
     instantiate(game, [transform(), set_rotation(-30, 30, 0), light_directional([1, 1, 1], 0.1)]);
 
     // Player.
-    instantiate(game, [...blueprint_player(game), set_position(0, 1, 0), set_rotation(0, 180, 0)]);
+    instantiate(game, [...blueprint_player(game), set_position(0, 1, 0)]);
 
     // Camera.
-    instantiate(game, [
-        ...blueprint_camera_follow(game),
-        set_position(0, 1000, 1000),
-        set_rotation(0, 180, 0),
-    ]);
+    instantiate(game, [...blueprint_camera_follow(game), set_position(-100, 0, -100)]);
 
     // Item spawner.
     instantiate(game, [

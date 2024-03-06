@@ -65,12 +65,7 @@ export function blueprint_player(game: Game) {
                 }),
             ],
             // Camera rig anchor.
-            [
-                transform(),
-                named("camera anchor"),
-                move(0, 3),
-                control_player(false, 0, 0.2, -10, 80),
-            ],
+            [transform(undefined, undefined, undefined, true), named("camera anchor")],
             // Overhead light.
             [transform([0, 2, 0]), light_point([1, 1, 1], 5)],
         ),
