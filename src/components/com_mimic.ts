@@ -15,7 +15,7 @@ import {Has} from "../world.js";
 export interface Mimic {
     /** Entity whose transform to mimic. */
     Target: Entity;
-    /** How laggy vs. precise is the mimicking [0-1]. */
+    /** The stiffness of the follower, eased exponentially. */
     Stiffness: number;
 }
 
@@ -23,9 +23,9 @@ export interface Mimic {
  * Add `Mimic` to an entity.
  *
  * @param target Entity whose transform to mimic.
- * @param stiffness How laggy vs. precise is the mimicking [0-1].
+ * @param stiffness The time in seconds that it takes the followers to get closer to the target by a factor of e.
  */
-export function mimic(target: Entity, stiffness: number = 0.1) {
+export function mimic(target: Entity, stiffness: number = 1) {
     return (game: Game, entity: Entity) => {
         game.World.Signature[entity] |= Has.Mimic;
         game.World.Mimic[entity] = {
