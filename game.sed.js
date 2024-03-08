@@ -2358,20 +2358,21 @@ var QUERY15 = 4194304 /* Transform */ | 8192 /* Mimic */;
 function sys_mimic(game2, delta) {
 for (let ent = 0; ent < game2.World.Signature.length; ent++) {
 if ((game2.World.Signature[ent] & QUERY15) === QUERY15) {
-update12(game2, ent);
+update12(game2, ent, delta);
 }
 }
 }
 var target_position = [0, 0, 0];
 var target_rotation = [0, 0, 0, 1];
-function update12(game2, entity) {
+function update12(game2, entity, delta) {
 let transform2 = game2.World.Transform[entity];
 let mimic2 = game2.World.Mimic[entity];
 let target_transform = game2.World.Transform[mimic2.Target];
 mat4_get_translation(target_position, target_transform.World);
 mat4_get_rotation(target_rotation, target_transform.World);
-vec3_lerp(transform2.Translation, transform2.Translation, target_position, mimic2.Stiffness);
-quat_slerp(transform2.Rotation, transform2.Rotation, target_rotation, mimic2.Stiffness);
+let t = 1 - Math.exp(-delta / mimic2.Stiffness);
+vec3_lerp(transform2.Translation, transform2.Translation, target_position, t);
+quat_slerp(transform2.Rotation, transform2.Rotation, target_rotation, t);
 game2.World.Signature[entity] |= 256 /* Dirty */;
 }
 
@@ -3422,7 +3423,7 @@ sys_ui(this, delta);
 };
 
 
-function mimic(target, stiffness = 0.1) {
+function mimic(target, stiffness = 1) {
 return (game2, entity) => {
 game2.World.Signature[entity] |= 8192 /* Mimic */;
 game2.World.Mimic[entity] = {
@@ -3452,7 +3453,7 @@ throw `No entity named ${name}.`;
 function blueprint_camera_follow(game2) {
 return [
 transform(),
-mimic(first_named(game2.World, "camera anchor")),
+mimic(first_named(game2.World, "camera anchor"), 0.2),
 children([
 transform(
 [50, 50, 50],
